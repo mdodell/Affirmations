@@ -2,9 +2,12 @@
   "name": "affirmations",
   "version": "0.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "17.x"
+  },
   "scripts": {
     "dev": "nx run-many --parallel --target=serve --projects=api,frontend",
-    "start": "nx serve",
+    "start": "node dist/apps/api/main",
     "build": "nx build",
     "test": "nx test"
   },
@@ -13,6 +16,7 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/serve-static": "^2.2.2",
     "core-js": "^3.6.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
