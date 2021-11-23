@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as Logo } from './logo.svg';
@@ -133,11 +134,18 @@ const StyledApp = styled.div`
 `;
 
 export function App() {
+  const [message, setMessage] = useState<string>('');
+
+  useEffect(() => {
+    fetch('/api')
+      .then((data) => data.json())
+      .then((msg: { message: string }) => setMessage(msg.message));
+  }, []);
   return (
     <StyledApp>
       <header className="flex">
         <Logo width="75" height="75" />
-        <h1>Welcome to frontend!</h1>
+        <h1>{message.length === 0 ? 'Fetching...' : message}</h1>
       </header>
       <main>
         <h2>Resources &amp; Tools</h2>
