@@ -2,16 +2,16 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 454:
+/***/ "./apps/api/src/app/app.controller.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const app_service_1 = __webpack_require__(968);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -35,18 +35,18 @@ exports.AppController = AppController;
 
 /***/ }),
 
-/***/ 292:
+/***/ "./apps/api/src/app/app.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppModule = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const app_controller_1 = __webpack_require__(454);
-const app_service_1 = __webpack_require__(968);
-const serve_static_1 = __webpack_require__(385);
-const path_1 = __webpack_require__(17);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const app_controller_1 = __webpack_require__("./apps/api/src/app/app.controller.ts");
+const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
+const serve_static_1 = __webpack_require__("@nestjs/serve-static");
+const path_1 = __webpack_require__("path");
 let AppModule = class AppModule {
 };
 AppModule = (0, tslib_1.__decorate)([
@@ -66,14 +66,14 @@ exports.AppModule = AppModule;
 
 /***/ }),
 
-/***/ 968:
+/***/ "./apps/api/src/app/app.service.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppService = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
 let AppService = class AppService {
     getData() {
         return { message: 'Welcome to api!' };
@@ -87,35 +87,35 @@ exports.AppService = AppService;
 
 /***/ }),
 
-/***/ 481:
+/***/ "@nestjs/common":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/common");
 
 /***/ }),
 
-/***/ 143:
+/***/ "@nestjs/core":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/core");
 
 /***/ }),
 
-/***/ 385:
+/***/ "@nestjs/serve-static":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/serve-static");
 
 /***/ }),
 
-/***/ 752:
+/***/ "tslib":
 /***/ ((module) => {
 
 module.exports = require("tslib");
 
 /***/ }),
 
-/***/ 17:
+/***/ "path":
 /***/ ((module) => {
 
 module.exports = require("path");
@@ -159,10 +159,10 @@ var exports = __webpack_exports__;
  * This is only a minimal backend to get started.
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const core_1 = __webpack_require__(143);
-const app_module_1 = __webpack_require__(292);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const core_1 = __webpack_require__("@nestjs/core");
+const app_module_1 = __webpack_require__("./apps/api/src/app/app.module.ts");
 function bootstrap() {
     return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
         const app = yield core_1.NestFactory.create(app_module_1.AppModule);
