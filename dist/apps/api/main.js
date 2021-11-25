@@ -6,7 +6,7 @@
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__("tslib");
@@ -22,8 +22,7 @@ let AppController = class AppController {
     }
     login(req) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            console.log({ req });
-            return 'sup';
+            return req.user;
         });
     }
 };
@@ -39,11 +38,11 @@ let AppController = class AppController {
     (0, tslib_1.__param)(0, (0, common_1.Request)()),
     (0, tslib_1.__metadata)("design:type", Function),
     (0, tslib_1.__metadata)("design:paramtypes", [Object]),
-    (0, tslib_1.__metadata)("design:returntype", Promise)
+    (0, tslib_1.__metadata)("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
 ], AppController.prototype, "login", null);
 AppController = (0, tslib_1.__decorate)([
     (0, common_1.Controller)(),
-    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_b = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _b : Object])
 ], AppController);
 exports.AppController = AppController;
 
@@ -62,6 +61,7 @@ const app_controller_1 = __webpack_require__("./apps/api/src/app/app.controller.
 const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
 const serve_static_1 = __webpack_require__("@nestjs/serve-static");
 const path_1 = __webpack_require__("path");
+const auth_module_1 = __webpack_require__("./apps/api/src/app/auth/auth.module.ts");
 let AppModule = class AppModule {
 };
 AppModule = (0, tslib_1.__decorate)([
@@ -71,6 +71,7 @@ AppModule = (0, tslib_1.__decorate)([
                 rootPath: (0, path_1.join)(__dirname, '..', 'frontend'),
                 exclude: ['/api*'],
             }),
+            auth_module_1.AuthModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
@@ -102,6 +103,65 @@ exports.AppService = AppService;
 
 /***/ }),
 
+/***/ "./apps/api/src/app/auth/auth.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
+const users_module_1 = __webpack_require__("./apps/api/src/app/users/users.module.ts");
+const passport_1 = __webpack_require__("@nestjs/passport");
+const local_strategy_1 = __webpack_require__("./apps/api/src/app/auth/local.strategy.ts");
+let AuthModule = class AuthModule {
+};
+AuthModule = (0, tslib_1.__decorate)([
+    (0, common_1.Module)({
+        imports: [users_module_1.UsersModule, passport_1.PassportModule],
+        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy],
+    })
+], AuthModule);
+exports.AuthModule = AuthModule;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/auth/auth.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const users_service_1 = __webpack_require__("./apps/api/src/app/users/users.service.ts");
+let AuthService = class AuthService {
+    constructor(usersService) {
+        this.usersService = usersService;
+    }
+    validateUser(username, pass) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const user = yield this.usersService.findOne(username);
+            if (user && user.password === pass) {
+                const { password } = user, result = (0, tslib_1.__rest)(user, ["password"]);
+                return result;
+            }
+            return null;
+        });
+    }
+};
+AuthService = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)(),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _a : Object])
+], AuthService);
+exports.AuthService = AuthService;
+
+
+/***/ }),
+
 /***/ "./apps/api/src/app/auth/local-auth.guard.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -117,6 +177,101 @@ LocalAuthGuard = (0, tslib_1.__decorate)([
     (0, common_1.Injectable)()
 ], LocalAuthGuard);
 exports.LocalAuthGuard = LocalAuthGuard;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/auth/local.strategy.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LocalStrategy = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const passport_local_1 = __webpack_require__("passport-local");
+const passport_1 = __webpack_require__("@nestjs/passport");
+const common_1 = __webpack_require__("@nestjs/common");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
+let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
+    constructor(authService) {
+        super();
+        this.authService = authService;
+    }
+    validate(username, password) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const user = yield this.authService.validateUser(username, password);
+            if (!user) {
+                throw new common_1.UnauthorizedException();
+            }
+            return user;
+        });
+    }
+};
+LocalStrategy = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)(),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], LocalStrategy);
+exports.LocalStrategy = LocalStrategy;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/users/users.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UsersModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const users_service_1 = __webpack_require__("./apps/api/src/app/users/users.service.ts");
+let UsersModule = class UsersModule {
+};
+UsersModule = (0, tslib_1.__decorate)([
+    (0, common_1.Module)({
+        providers: [users_service_1.UsersService],
+        exports: [users_service_1.UsersService],
+    })
+], UsersModule);
+exports.UsersModule = UsersModule;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/users/users.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UsersService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+let UsersService = class UsersService {
+    constructor() {
+        this.users = [
+            {
+                userId: 1,
+                username: 'john',
+                password: 'changeme',
+            },
+            {
+                userId: 2,
+                username: 'maria',
+                password: 'guess',
+            },
+        ];
+    }
+    findOne(username) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return this.users.find((user) => user.username === username);
+        });
+    }
+};
+UsersService = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)()
+], UsersService);
+exports.UsersService = UsersService;
 
 
 /***/ }),
@@ -146,6 +301,13 @@ module.exports = require("@nestjs/passport");
 /***/ ((module) => {
 
 module.exports = require("@nestjs/serve-static");
+
+/***/ }),
+
+/***/ "passport-local":
+/***/ ((module) => {
+
+module.exports = require("passport-local");
 
 /***/ }),
 

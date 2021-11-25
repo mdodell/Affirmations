@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
+import { UserWithoutPassword } from './users/users.service';
 
 @Controller()
 export class AppController {
@@ -13,8 +14,7 @@ export class AppController {
 
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
-  async login(@Request() req) {
-    console.log({ req });
-    return 'sup';
+  async login(@Request() req): Promise<UserWithoutPassword> {
+    return req.user;
   }
 }
