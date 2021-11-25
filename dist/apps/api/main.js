@@ -6,23 +6,25 @@
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
 const local_auth_guard_1 = __webpack_require__("./apps/api/src/app/auth/local-auth.guard.ts");
 let AppController = class AppController {
-    constructor(appService) {
+    constructor(appService, authService) {
         this.appService = appService;
+        this.authService = authService;
     }
     getData() {
         return this.appService.getData();
     }
     login(req) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            return req.user;
+            return this.authService.login(req.user);
         });
     }
 };
@@ -42,7 +44,7 @@ let AppController = class AppController {
 ], AppController.prototype, "login", null);
 AppController = (0, tslib_1.__decorate)([
     (0, common_1.Controller)(),
-    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_b = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _b : Object])
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_b = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _b : Object, typeof (_c = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _c : Object])
 ], AppController);
 exports.AppController = AppController;
 
@@ -116,12 +118,21 @@ const users_module_1 = __webpack_require__("./apps/api/src/app/users/users.modul
 const passport_1 = __webpack_require__("@nestjs/passport");
 const local_strategy_1 = __webpack_require__("./apps/api/src/app/auth/local.strategy.ts");
 const jwt_1 = __webpack_require__("@nestjs/jwt");
+const constants_1 = __webpack_require__("./apps/api/src/app/auth/constants.ts");
 let AuthModule = class AuthModule {
 };
 AuthModule = (0, tslib_1.__decorate)([
     (0, common_1.Module)({
-        imports: [users_module_1.UsersModule, jwt_1.JwtService, passport_1.PassportModule],
+        imports: [
+            users_module_1.UsersModule,
+            passport_1.PassportModule,
+            jwt_1.JwtModule.register({
+                secret: constants_1.jwtConstants.secret,
+                signOptions: { expiresIn: '60s' },
+            }),
+        ],
         providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy],
+        exports: [auth_service_1.AuthService],
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;
@@ -169,6 +180,19 @@ AuthService = (0, tslib_1.__decorate)([
     (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
 ], AuthService);
 exports.AuthService = AuthService;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/auth/constants.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.jwtConstants = void 0;
+exports.jwtConstants = {
+    secret: process.env.JWT_SECRET,
+};
 
 
 /***/ }),
