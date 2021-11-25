@@ -12,12 +12,19 @@ exports.AppController = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
+const local_auth_guard_1 = __webpack_require__("./apps/api/src/app/auth/local-auth.guard.ts");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
     getData() {
         return this.appService.getData();
+    }
+    login(req) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            console.log({ req });
+            return 'sup';
+        });
     }
 };
 (0, tslib_1.__decorate)([
@@ -26,6 +33,14 @@ let AppController = class AppController {
     (0, tslib_1.__metadata)("design:paramtypes", []),
     (0, tslib_1.__metadata)("design:returntype", void 0)
 ], AppController.prototype, "getData", null);
+(0, tslib_1.__decorate)([
+    (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
+    (0, common_1.Post)('auth/login'),
+    (0, tslib_1.__param)(0, (0, common_1.Request)()),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [Object]),
+    (0, tslib_1.__metadata)("design:returntype", Promise)
+], AppController.prototype, "login", null);
 AppController = (0, tslib_1.__decorate)([
     (0, common_1.Controller)(),
     (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
@@ -87,6 +102,25 @@ exports.AppService = AppService;
 
 /***/ }),
 
+/***/ "./apps/api/src/app/auth/local-auth.guard.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LocalAuthGuard = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const passport_1 = __webpack_require__("@nestjs/passport");
+let LocalAuthGuard = class LocalAuthGuard extends (0, passport_1.AuthGuard)('local') {
+};
+LocalAuthGuard = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)()
+], LocalAuthGuard);
+exports.LocalAuthGuard = LocalAuthGuard;
+
+
+/***/ }),
+
 /***/ "@nestjs/common":
 /***/ ((module) => {
 
@@ -98,6 +132,13 @@ module.exports = require("@nestjs/common");
 /***/ ((module) => {
 
 module.exports = require("@nestjs/core");
+
+/***/ }),
+
+/***/ "@nestjs/passport":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/passport");
 
 /***/ }),
 
