@@ -13,6 +13,11 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  @Get('signup')
+  async signUp(@Request() req) {
+    return this.authService.signUp(req.body);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
