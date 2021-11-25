@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "nx run-many --parallel --target=serve --projects=api,frontend",
     "start": "node dist/apps/api/main",
-    "build": "nx build",
+    "build": "nx run-many --parallel --target=build --projects=api,frontend",
     "test": "nx test"
   },
   "private": true,
