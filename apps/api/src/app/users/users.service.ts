@@ -14,12 +14,12 @@ export class UsersService {
   private readonly users: User[] = [
     {
       userId: 1,
-      email: 'dodellmitchell@gmail.com',
-      password: 'changeme',
+      email: 'test@test.com',
+      password: 'changemetest',
     },
     {
       userId: 2,
-      email: 'mdodell@brandeis.edu',
+      email: 'hello@hello.com',
       password: 'guess',
     },
   ];

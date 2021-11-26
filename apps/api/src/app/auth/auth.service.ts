@@ -15,7 +15,7 @@ export class AuthService {
     private mailService: MailService
   ) {}
 
-  async signUp(user: User) {
+  async signUp(user: Omit<User, 'userId'>) {
     return await this.mailService.sendConfirmation(user);
   }
 
@@ -34,11 +34,9 @@ export class AuthService {
     return null;
   }
 
-  async login(user: UserWithoutPassword) {
-    const payload = { email: user.email, sub: user.userId };
-
+  async login(email: User['email']) {
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign({ email }),
     };
   }
 }

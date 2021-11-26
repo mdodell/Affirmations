@@ -6,7 +6,7 @@ import { User } from '../users/users.service';
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
-  async sendConfirmation(user: User) {
+  async sendConfirmation(user: Omit<User, 'userId'>) {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Welcome to E-ffirmations',
