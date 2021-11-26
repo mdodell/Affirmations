@@ -20,12 +20,12 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(
     session({
-      secret: 'sessionsecret',
+      secret: 'my-secret',
       resave: false,
       saveUninitialized: false,
     })
   );
-  app.use(csurf({ cookie: true }));
+  app.use(csurf());
 
   const port = process.env.PORT || 3333;
   await app.listen(port);

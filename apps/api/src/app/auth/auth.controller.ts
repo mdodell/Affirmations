@@ -7,8 +7,8 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { User } from '../users/users.service';
+import { Response } from 'express';
+import { UserDto } from '../../dtos/user.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -33,15 +33,14 @@ export class AuthController {
   @Post('logout')
   async logout(@Res({ passthrough: true }) response) {
     response.clearCookie('jwt');
-    response.clearCookie('_csrf');
   }
 
-  @Get('signup')
+  @Post('signup')
   async signUp(
     @Body('email') email: string,
     @Body('password') password: string
   ) {
-    const newUser: Omit<User, 'userId'> = { email, password };
+    const newUser: UserDto = { email, password };
     return this.authService.signUp(newUser);
   }
 

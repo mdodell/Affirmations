@@ -8,6 +8,7 @@ import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MailModule } from './mail/mail.module';
     }),
     AuthModule,
     MailModule,
+    MongooseModule.forRoot('mongodb://localhost:27017/affirmations'),
   ],
   controllers: [AppController],
   providers: [AppService],
