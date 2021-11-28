@@ -24,8 +24,14 @@ import { SequelizeModule } from '@nestjs/sequelize';
     MailModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
+      dialectOptions: process.env.NODE_ENV === 'production' && {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
       host: process.env.DB_HOST,
-      port: Number(process.env.PORT),
+      port: 5432,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
