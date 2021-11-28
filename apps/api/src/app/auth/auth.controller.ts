@@ -43,7 +43,6 @@ export class AuthController {
     @Body('email') email: string,
     @Body('password') password: string
   ) {
-    const saltOrRounds = 10;
     const newUser = { email, password } as User;
     return this.authService.signUp(newUser);
   }
