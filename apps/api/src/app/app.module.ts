@@ -11,8 +11,6 @@ import { MailModule } from './mail/mail.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { isProductionEnvironment } from './utils/environment';
 
-console.log({ environment: isProductionEnvironment });
-
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -28,11 +26,13 @@ console.log({ environment: isProductionEnvironment });
     MailModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      dialectOptions: isProductionEnvironment && {
+      dialectOptions: {
         ssl: {
+          require: true,
           rejectUnauthorized: false,
         },
       },
+      ssl: true,
       host: process.env.DB_HOST,
       port: 5432,
       username: process.env.DB_USERNAME,
