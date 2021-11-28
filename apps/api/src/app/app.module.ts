@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { isProductionEnvironment } from './utils/environment';
 
 @Module({
   imports: [
@@ -18,13 +19,14 @@ import { SequelizeModule } from '@nestjs/sequelize';
     }),
     ConfigModule.forRoot({
       envFilePath: ['.env.local'],
+      ignoreEnvFile: isProductionEnvironment,
       isGlobal: true,
     }),
     AuthModule,
     MailModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      dialectOptions: process.env.NODE_ENV === 'production' && {
+      dialectOptions: isProductionEnvironment && {
         ssl: {
           require: true,
           rejectUnauthorized: false,
