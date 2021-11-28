@@ -1,30 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { User } from './user.model';
 
-// This should be a real class/interface representing a user entity
-export type User = {
-  userId: number;
-  email: string;
-  password: string;
-};
-
-export type UserWithoutPassword = Omit<User, 'password'>;
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
-    {
-      userId: 1,
-      email: 'dodellmitchell@gmail.com',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      email: 'mdodell@brandeis.edu',
-      password: 'guess',
-    },
-  ];
+  constructor(@InjectModel(User) private userModel: typeof User) {}
 
-  async findOne(email: string): Promise<User | undefined> {
-    return this.users.find((user) => user.email === email);
+  async create(user: User): Promise<User> {
+    const { password, ...rest } = user;
+
+    const saltOrRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+
+    return this.userModel.create({
+      password: hashedPassword,
+      ...rest,
+    });
+  }
+
+  async findOne(email: string): Promise<User> {
+    return this.userModel.findOne({
+      where: {
+        email,
+      },
+    });
   }
 }
