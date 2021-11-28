@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { UserDto } from '../../dtos/user.dto';
+import { User } from '../users/user.model';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -22,12 +22,15 @@ export class AuthController {
   async login(
     @Body('email') email: string,
     @Res({ passthrough: true }) response: Response
-  ): Promise<{ access_token: string }> {
+  ): Promise<{ access_token: string; email: string }> {
     const jwt = await this.authService.login(email);
 
     response.cookie('jwt', jwt.access_token, { httpOnly: true });
 
-    return jwt;
+    return {
+      access_token: jwt.access_token,
+      email,
+    };
   }
 
   @Post('logout')
@@ -40,7 +43,8 @@ export class AuthController {
     @Body('email') email: string,
     @Body('password') password: string
   ) {
-    const newUser: UserDto = { email, password };
+    const saltOrRounds = 10;
+    const newUser = { email, password } as User;
     return this.authService.signUp(newUser);
   }
 

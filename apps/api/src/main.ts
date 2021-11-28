@@ -9,8 +9,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 
 import * as cookieParser from 'cookie-parser';
-import * as session from 'express-session';
-import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,14 +16,6 @@ async function bootstrap() {
 
   app.setGlobalPrefix(globalPrefix);
   app.use(cookieParser());
-  app.use(
-    session({
-      secret: 'my-secret',
-      resave: false,
-      saveUninitialized: false,
-    })
-  );
-  app.use(csurf());
 
   const port = process.env.PORT || 3333;
   await app.listen(port);

@@ -8,7 +8,7 @@ import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
-import { MongooseModule } from '@nestjs/mongoose';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
   imports: [
@@ -22,7 +22,16 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
     AuthModule,
     MailModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/affirmations'),
+    SequelizeModule.forRoot({
+      dialect: 'postgres',
+      host: process.env.DB_HOST,
+      port: Number(process.env.PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      autoLoadModels: true,
+      synchronize: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
