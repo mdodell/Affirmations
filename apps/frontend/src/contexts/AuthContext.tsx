@@ -23,7 +23,7 @@ export const useAuth = auth;
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const fetchUser = useCallback(async () => {
     try {
