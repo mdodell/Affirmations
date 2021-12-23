@@ -1,8 +1,14 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, IsEmail, Model, Table } from 'sequelize-typescript';
 
 @Table
 export class User extends Model {
-  @Column
+  @IsEmail
+  @Column({
+    unique: {
+      name: 'email',
+      msg: 'Email must be unique',
+    },
+  })
   email: string;
 
   @Column
