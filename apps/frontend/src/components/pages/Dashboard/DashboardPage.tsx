@@ -1,6 +1,4 @@
-interface DashboardPageProps {}
-
-const DashboardPage: React.VFC<DashboardPageProps> = () => {
+const DashboardPage: React.VFC = () => {
   return <>Dashboard Page</>;
 };
 

@@ -8,5 +8,8 @@
     "target": "es2015"
   },
   "exclude": ["**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts",
+    "src/database/migrations/20211225015601-create-user.js"
+  ]
 }

@@ -12,5 +12,11 @@ export class User extends Model {
   email: string;
 
   @Column
+  firstName: string;
+
+  @Column
+  lastName: string;
+
+  @Column
   password: string;
 }

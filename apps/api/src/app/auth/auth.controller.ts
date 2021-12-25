@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Post,
   Req,
   Res,
@@ -17,6 +18,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
     @Body('email') email: string,
@@ -48,15 +50,21 @@ export class AuthController {
   @Post('signup')
   async signUp(
     @Body('email') email: string,
-    @Body('password') password: string
+    @Body('password') password: string,
+    @Body('firstName') firstName: string,
+    @Body('lastName') lastName: string
   ) {
-    const newUser = { email, password } as User;
+    const newUser = { email, password, firstName, lastName } as User;
     return this.authService.signUp(newUser);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @HttpCode(200)
   getProfile(@Req() req) {
-    return req.user;
+    return {
+      user: req.user,
+      statusCode: 200,
+    };
   }
 }

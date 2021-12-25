@@ -6,15 +6,18 @@ import {
   Text,
   Button,
   useDisclosure,
+  useColorMode,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useCallback } from 'react';
 import { AuthContextType, useAuth } from '../../../contexts/AuthContext';
 import { sign } from 'crypto';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { user, signIn, signOut } = useAuth() as AuthContextType;
+  const { user, signOut } = useAuth() as AuthContextType;
+  const navigate = useNavigate();
 
   const handleToggle = useCallback(
     () => (isOpen ? onClose() : onOpen()),
@@ -62,21 +65,22 @@ const Header = () => {
           <Button
             onClick={() => signOut()}
             variant="outline"
+            color="white"
             _hover={{
-              bg: 'purple.700',
-              borderColor: 'purple.700',
+              bg: 'white',
+              color: 'purple.500',
             }}
-            cursor="pointer"
           >
             Log out
           </Button>
         ) : (
           <Button
-            onClick={() => null}
+            onClick={() => navigate('/login')}
             variant="outline"
+            color="white"
             _hover={{
-              bg: 'purple.700',
-              borderColor: 'purple.700',
+              bg: 'white',
+              color: 'purple.500',
             }}
             cursor="pointer"
           >
