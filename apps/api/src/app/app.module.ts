@@ -9,6 +9,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { ScheduleModule } from '@nestjs/schedule';
+
 import { isProductionEnvironment } from './utils/environment';
 
 @Module({
@@ -17,6 +19,7 @@ import { isProductionEnvironment } from './utils/environment';
       rootPath: join(__dirname, '..', 'frontend'),
       exclude: ['/api*'],
     }),
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       envFilePath: ['.env.local'],
       ignoreEnvFile: isProductionEnvironment,
