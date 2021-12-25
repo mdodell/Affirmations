@@ -29,8 +29,6 @@ import { isProductionEnvironment } from './utils/environment';
       dialectOptions: isProductionEnvironment && {
         ssl: true,
       },
-      native: isProductionEnvironment,
-      ssl: isProductionEnvironment,
       host: process.env.DB_HOST,
       port: 5432,
       username: process.env.DB_USERNAME,
