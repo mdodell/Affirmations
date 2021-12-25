@@ -27,11 +27,9 @@ import { isProductionEnvironment } from './utils/environment';
     SequelizeModule.forRoot({
       dialect: 'postgres',
       dialectOptions: isProductionEnvironment && {
-        ssl: {
-          require: isProductionEnvironment,
-          rejectUnauthorized: isProductionEnvironment,
-        },
+        ssl: true,
       },
+      native: isProductionEnvironment,
       ssl: isProductionEnvironment,
       host: process.env.DB_HOST,
       port: 5432,
