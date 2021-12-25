@@ -26,6 +26,12 @@ import { isProductionEnvironment } from './utils/environment';
     MailModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
+      dialectOptions: isProductionEnvironment && {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
       ssl: isProductionEnvironment,
       host: process.env.DB_HOST,
       port: 5432,

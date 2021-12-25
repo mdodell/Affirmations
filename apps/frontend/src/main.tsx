@@ -31,6 +31,7 @@ ReactDOM.render(
               align="center"
             >
               <Routes>
+                <Route path="/" element={<Navigate to="/login" />} />
                 <Route
                   path="/login"
                   element={
