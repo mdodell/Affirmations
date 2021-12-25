@@ -87,7 +87,7 @@ const LoginPage: React.VFC = () => {
               </InputGroup>
             </FormControl>
             <Text align="right" color="teal.500">
-              <Link as={RouterLink} to="forgot-password">
+              <Link as={RouterLink} to="/forgot-password">
                 Forgot your password?
               </Link>
             </Text>
