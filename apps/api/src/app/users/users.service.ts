@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
-  async create(user: User): Promise<User> {
+  async create(user: User): Promise<User | void> {
     const { password, ...rest } = user;
 
     const saltOrRounds = 10;

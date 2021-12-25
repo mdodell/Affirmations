@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Post,
   Req,
   Res,
@@ -25,31 +26,45 @@ export class AuthController {
   ): Promise<{ access_token: string; email: string }> {
     const jwt = await this.authService.login(email);
 
-    response.cookie('jwt', jwt.access_token, { httpOnly: true });
-
-    return {
+    const data = {
       access_token: jwt.access_token,
       email,
     };
+
+    response.cookie('jwt', data.access_token, {
+      httpOnly: true,
+    });
+    response.cookie('email', data.email, {
+      httpOnly: true,
+    });
+
+    return data;
   }
 
   @Post('logout')
   async logout(@Res({ passthrough: true }) response) {
+    response.clearCookie('email');
     response.clearCookie('jwt');
   }
 
   @Post('signup')
   async signUp(
     @Body('email') email: string,
-    @Body('password') password: string
+    @Body('password') password: string,
+    @Body('firstName') firstName: string,
+    @Body('lastName') lastName: string
   ) {
-    const newUser = { email, password } as User;
+    const newUser = { email, password, firstName, lastName } as User;
     return this.authService.signUp(newUser);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @HttpCode(200)
   getProfile(@Req() req) {
-    return req.user;
+    return {
+      user: req.user,
+      statusCode: 200,
+    };
   }
 }

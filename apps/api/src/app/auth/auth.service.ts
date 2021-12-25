@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from '../mail/mail.service';
@@ -14,20 +14,36 @@ export class AuthService {
   ) {}
 
   async signUp(user: User) {
-    await this.usersService.create(user);
-    return await this.mailService.sendConfirmation(user);
+    await this.usersService.create(user).catch((error) => {
+      throw new UnauthorizedException({
+        statusCode: 500,
+        error,
+      });
+    });
+    await this.mailService.sendConfirmation(user);
+    const { email, firstName, lastName } = user;
+    return {
+      email,
+      firstName,
+      lastName,
+    };
   }
 
-  async validateUser(email: string, pass: string): Promise<{ email: string }> {
+  async validateUser(
+    email: string,
+    pass: string
+  ): Promise<{ email: string; firstName: string; lastName: string }> {
     const user = await this.usersService.findOne(email);
     if (!user) return null;
 
     const isValidPassword = await bcrypt.compare(pass, user.password);
 
     if (isValidPassword) {
-      const { email } = user;
+      const { email, firstName, lastName } = user;
       return {
         email,
+        firstName,
+        lastName,
       };
     }
   }

@@ -6,12 +6,18 @@ import {
   Text,
   Button,
   useDisclosure,
+  useColorMode,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useCallback } from 'react';
+import { AuthContextType, useAuth } from '../../../contexts/AuthContext';
+import { sign } from 'crypto';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { user, signOut } = useAuth() as AuthContextType;
+  const navigate = useNavigate();
 
   const handleToggle = useCallback(
     () => (isOpen ? onClose() : onOpen()),
@@ -25,7 +31,7 @@ const Header = () => {
       justify="space-between"
       wrap="wrap"
       padding={6}
-      bg="pink.500"
+      bg="purple.500"
       color="white"
     >
       <Flex align="center" mr={5}>
@@ -55,16 +61,32 @@ const Header = () => {
         display={{ base: isOpen ? 'block' : 'none', md: 'block' }}
         mt={{ base: 4, md: 0 }}
       >
-        <Button
-          variant="outline"
-          _hover={{
-            bg: 'pin.700',
-            borderColor: 'pink.700',
-          }}
-          cursor="pointer"
-        >
-          Create account
-        </Button>
+        {user ? (
+          <Button
+            onClick={() => signOut()}
+            variant="outline"
+            color="white"
+            _hover={{
+              bg: 'white',
+              color: 'purple.500',
+            }}
+          >
+            Log out
+          </Button>
+        ) : (
+          <Button
+            onClick={() => navigate('/login')}
+            variant="outline"
+            color="white"
+            _hover={{
+              bg: 'white',
+              color: 'purple.500',
+            }}
+            cursor="pointer"
+          >
+            Login
+          </Button>
+        )}
       </Box>
     </Flex>
   );
