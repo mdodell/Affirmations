@@ -4,9 +4,9 @@ import {
   Get,
   HttpCode,
   Post,
-  Req,
   Res,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { User } from '../users/user.model';
@@ -21,14 +21,15 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
-    @Body('email') email: string,
+    @Request() req,
     @Res({ passthrough: true }) response: Response
   ): Promise<{ access_token: string; email: string }> {
-    const jwt = await this.authService.login(email);
+    const loginResponse = await this.authService.login(req.user);
 
+    console.log({ loginResponse });
     const data = {
-      access_token: jwt.access_token,
-      email,
+      access_token: loginResponse.access_token,
+      email: loginResponse.email,
     };
 
     response.cookie('jwt', data.access_token, {
@@ -61,7 +62,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   @HttpCode(200)
-  getProfile(@Req() req) {
+  getProfile(@Request() req) {
     return {
       user: req.user,
       statusCode: 200,
