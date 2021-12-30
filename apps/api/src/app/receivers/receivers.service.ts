@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { Affirmation } from '../affirmations/models/affirmation.model';
 import { User } from '../users/user.model';
@@ -8,7 +9,10 @@ import { Receiver } from './models/receiver.model';
 
 @Injectable()
 export class ReceiversService {
-  constructor(@InjectModel(Receiver) private receiverModel: typeof Receiver) {}
+  constructor(
+    @InjectModel(Receiver) private receiverModel: typeof Receiver,
+    private jwtService: JwtService
+  ) {}
   create(createReceiverDto: CreateReceiverDto, user: User) {
     return this.receiverModel.create({
       ...createReceiverDto,
@@ -53,6 +57,14 @@ export class ReceiversService {
       where: {
         id,
         userId: user.id,
+      },
+    });
+  }
+
+  validateReceiver(token: string) {
+    return this.receiverModel.findOne({
+      where: {
+        subscriptionToken: token,
       },
     });
   }

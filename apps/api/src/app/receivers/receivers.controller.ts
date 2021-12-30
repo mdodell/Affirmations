@@ -8,12 +8,14 @@ import {
   Delete,
   UseGuards,
   Request,
+  Req,
 } from '@nestjs/common';
 import { ReceiversService } from './receivers.service';
 import { CreateReceiverDto } from './dto/create-receiver.dto';
 import { UpdateReceiverDto } from './dto/update-receiver.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { MailService } from '../mail/mail.service';
+import { ReceiverTokenGuard } from './receiverToken-auth.guard';
 
 @Controller('receivers')
 export class ReceiversController {
@@ -37,6 +39,13 @@ export class ReceiversController {
   @Get()
   findAllUserReceivers(@Request() req) {
     return this.receiversService.findAllUserReceivers(req.user);
+  }
+
+  @UseGuards(ReceiverTokenGuard)
+  @Get('testing')
+  testing(@Request() req) {
+    console.log(req.query.token);
+    return 'Worked';
   }
 
   @UseGuards(JwtAuthGuard)

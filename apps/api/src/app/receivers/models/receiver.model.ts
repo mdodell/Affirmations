@@ -25,6 +25,9 @@ export class Receiver extends Model {
   @Column
   lastName: string;
 
+  @Column
+  subscriptionToken: string;
+
   @ForeignKey(() => User)
   userId: User['id'];
 
