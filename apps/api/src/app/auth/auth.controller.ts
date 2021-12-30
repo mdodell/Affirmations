@@ -26,15 +26,17 @@ export class AuthController {
   ): Promise<{ access_token: string; email: string }> {
     const loginResponse = await this.authService.login(req.user);
 
-    console.log({ loginResponse });
     const data = {
       access_token: loginResponse.access_token,
       email: loginResponse.email,
+      firstName: loginResponse.firstName,
+      lastName: loginResponse.lastName,
     };
 
     response.cookie('jwt', data.access_token, {
       httpOnly: true,
     });
+
     response.cookie('email', data.email, {
       httpOnly: true,
     });
