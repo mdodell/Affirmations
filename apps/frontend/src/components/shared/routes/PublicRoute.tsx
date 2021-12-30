@@ -1,7 +1,7 @@
 import { ReactNode, FC } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
-import Loader from '../Loader/Loader';
+import Loader from '../loader/Loader';
 
 interface PublicRouteProps {
   children: ReactNode;

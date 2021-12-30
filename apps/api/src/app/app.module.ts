@@ -12,6 +12,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { isProductionEnvironment } from './utils/environment';
+import { AffirmationsModule } from './affirmations/affirmations.module';
+import { ReceiversModule } from './receivers/receivers.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { isProductionEnvironment } from './utils/environment';
       isGlobal: true,
     }),
     AuthModule,
+    AffirmationsModule,
+    ReceiversModule,
     MailModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
