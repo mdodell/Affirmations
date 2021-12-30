@@ -18,6 +18,7 @@ import SignUpPage from './components/pages/SignUp/SignUpPage';
 import theme from './constants/theme';
 import NotFoundPage from './components/pages/NotFound/NotFoundPage';
 import UnsubscribePage from './components/pages/Unsubscribe/UnsubscribePage';
+import ResubscribePage from './components/pages/Resubscribe/ResubscribePage';
 
 ReactDOM.render(
   <StrictMode>
@@ -56,6 +57,14 @@ ReactDOM.render(
                     <PrivateRoute>
                       <DashboardPage />
                     </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/resubscribe"
+                  element={
+                    <PublicRoute>
+                      <ResubscribePage />
+                    </PublicRoute>
                   }
                 />
                 <Route

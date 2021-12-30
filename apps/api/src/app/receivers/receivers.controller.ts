@@ -53,6 +53,10 @@ export class ReceiversController {
       receiver
     );
 
+    if (!updatedReceiver.subscribed) {
+      await this.mailService.sendUnsubscribeMessage(updatedReceiver);
+    }
+
     return `You have been ${
       updatedReceiver.subscribed ? 'subscribed' : 'unsubscribed'
     } from 'E-ffirmations'`;

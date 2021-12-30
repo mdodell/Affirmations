@@ -21,6 +21,19 @@ export class MailService {
     });
   }
 
+  async sendUnsubscribeMessage(receiver: Receiver) {
+    await this.mailerService.sendMail({
+      to: receiver.email,
+      subject: 'You have been unsubscribed from E-ffirmations!',
+      template: './unsubscribe',
+      context: {
+        URL: process.env.URL,
+        token: receiver.subscriptionToken,
+        fullName: `${receiver.firstName} ${receiver.lastName}`,
+      },
+    });
+  }
+
   async sendAffirmationWelcomeMessage(receiver: Receiver, user: User) {
     await this.mailerService.sendMail({
       to: receiver.email,
