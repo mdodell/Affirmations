@@ -16,6 +16,7 @@ export class ReceiversService {
   create(createReceiverDto: CreateReceiverDto, user: User) {
     return this.receiverModel.create({
       ...createReceiverDto,
+      subscriptionToken: this.jwtService.sign(createReceiverDto),
       userId: user.id,
     });
   }

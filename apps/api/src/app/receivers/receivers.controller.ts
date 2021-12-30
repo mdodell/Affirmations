@@ -8,7 +8,6 @@ import {
   Delete,
   UseGuards,
   Request,
-  Req,
 } from '@nestjs/common';
 import { ReceiversService } from './receivers.service';
 import { CreateReceiverDto } from './dto/create-receiver.dto';
@@ -42,9 +41,8 @@ export class ReceiversController {
   }
 
   @UseGuards(ReceiverTokenGuard)
-  @Get('testing')
+  @Get('/testing')
   testing(@Request() req) {
-    console.log(req.query.token);
     return 'Worked';
   }
 

@@ -7,15 +7,16 @@ import { MailService } from '../mail/mail.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from '../auth/constants';
 import { PassportModule } from '@nestjs/passport';
-import { ReceiverTokenStrategy } from './receiverToken.stategy';
+import { ReceiverTokenStrategy } from './receiverToken.strategy';
+import { JwtStrategy } from '../auth/jwt.strategy';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([Receiver]),
     PassportModule,
     JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '24h' },
+      secret: 'TestingSecret',
+      signOptions: { expiresIn: '30d' },
     }),
   ],
   controllers: [ReceiversController],

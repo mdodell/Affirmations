@@ -12,7 +12,7 @@ import { MailModule } from '../mail/mail.module';
 @Module({
   imports: [
     UsersModule,
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'AuthToken' }),
     MailModule,
     JwtModule.register({
       secret: jwtConstants.secret,
