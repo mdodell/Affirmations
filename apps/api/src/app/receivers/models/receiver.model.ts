@@ -7,6 +7,7 @@ import {
   BelongsTo,
   AllowNull,
   IsEmail,
+  Default,
 } from 'sequelize-typescript';
 import { Affirmation } from '../../affirmations/models/affirmation.model';
 import { User } from '../../users/user.model';
@@ -24,6 +25,13 @@ export class Receiver extends Model {
   @AllowNull(false)
   @Column
   lastName: string;
+
+  @Column
+  subscriptionToken: string;
+
+  @Default(true)
+  @Column
+  subscribed: boolean;
 
   @ForeignKey(() => User)
   userId: User['id'];

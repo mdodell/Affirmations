@@ -4,11 +4,21 @@ import { ReceiversController } from './receivers.controller';
 import { Receiver } from './models/receiver.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { MailService } from '../mail/mail.service';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from '../auth/constants';
+import { PassportModule } from '@nestjs/passport';
+import { ReceiverTokenStrategy } from './receiverToken.strategy';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Receiver])],
+  imports: [
+    SequelizeModule.forFeature([Receiver]),
+    PassportModule,
+    JwtModule.register({
+      secret: 'TestingSecret',
+    }),
+  ],
   controllers: [ReceiversController],
-  providers: [ReceiversService, MailService],
+  providers: [ReceiversService, MailService, ReceiverTokenStrategy],
   exports: [ReceiversService],
 })
 export class ReceiversModule {}

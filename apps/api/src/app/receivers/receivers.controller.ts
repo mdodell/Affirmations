@@ -14,6 +14,7 @@ import { CreateReceiverDto } from './dto/create-receiver.dto';
 import { UpdateReceiverDto } from './dto/update-receiver.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { MailService } from '../mail/mail.service';
+import { ReceiverTokenGuard } from './receiverToken-auth.guard';
 
 @Controller('receivers')
 export class ReceiversController {
@@ -37,6 +38,28 @@ export class ReceiversController {
   @Get()
   findAllUserReceivers(@Request() req) {
     return this.receiversService.findAllUserReceivers(req.user);
+  }
+
+  @UseGuards(ReceiverTokenGuard)
+  @Get('subscriptionStatus')
+  async updateSubscriptionStatus(@Request() req) {
+    const { token, subscriptionStatus } = req.query;
+    const receiver = await this.receiversService.updateSubscriptionStatus(
+      token,
+      subscriptionStatus
+    );
+
+    const updatedReceiver = await this.receiversService.updateSubscriptionToken(
+      receiver
+    );
+
+    if (!updatedReceiver.subscribed) {
+      await this.mailService.sendUnsubscribeMessage(updatedReceiver);
+    }
+
+    return `You have been ${
+      updatedReceiver.subscribed ? 'subscribed' : 'unsubscribed'
+    } from 'E-ffirmations'`;
   }
 
   @UseGuards(JwtAuthGuard)

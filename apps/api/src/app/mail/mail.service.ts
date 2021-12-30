@@ -1,6 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { AffirmationsService } from '../affirmations/affirmations.service';
 import { Affirmation } from '../affirmations/models/affirmation.model';
 import { Receiver } from '../receivers/models/receiver.model';
 import { User } from '../users/user.model';
@@ -18,6 +17,19 @@ export class MailService {
       template: './confirmation',
       context: {
         name: user.email,
+      },
+    });
+  }
+
+  async sendUnsubscribeMessage(receiver: Receiver) {
+    await this.mailerService.sendMail({
+      to: receiver.email,
+      subject: 'You have been unsubscribed from E-ffirmations!',
+      template: './unsubscribe',
+      context: {
+        URL: process.env.URL,
+        token: receiver.subscriptionToken,
+        fullName: `${receiver.firstName} ${receiver.lastName}`,
       },
     });
   }
@@ -43,7 +55,10 @@ export class MailService {
       subject: `Your Daily E-firrmation from ${user.firstName} ${user.lastName}`,
       template: './affirmation',
       context: {
+        URL: process.env.URL,
+        fullName: `${user.firstName} ${user.lastName}`,
         message: affirmation.message,
+        subscriptionToken: receiver.subscriptionToken,
       },
     });
   }

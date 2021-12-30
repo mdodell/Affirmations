@@ -6,7 +6,7 @@ import { User } from '../users/user.model';
 import { jwtConstants } from './constants';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'AuthToken') {
   constructor() {
     super({
       jwtFromRequest: (req) => req.cookies.jwt,
@@ -15,9 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(
-    payload: User
-  ): Promise<{
+  async validate(payload: User): Promise<{
     email: User['email'];
     id: User['id'];
     firstName: User['firstName'];

@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpCode,
   Post,
   Res,
   UseGuards,
@@ -63,7 +62,6 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  @HttpCode(200)
   getProfile(@Request() req) {
     return {
       user: req.user,
