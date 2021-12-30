@@ -1,11 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Receiver } from './models/receiver.model';
 import { ReceiversService } from './receivers.service';
 
 @Injectable()
 export class ReceiverTokenStrategy extends PassportStrategy(Strategy) {
-  constructor(private receiversService: ReceiversService) {
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromUrlQueryParameter('token'),
       ignoreExpiration: false,
@@ -13,12 +14,7 @@ export class ReceiverTokenStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(token: string) {
-    console.log({ token });
-    const receiver = await this.receiversService.validateReceiver(token);
-    if (!receiver) {
-      throw new UnauthorizedException('This receiver was not authorized!');
-    }
+  async validate(receiver: Receiver) {
     return receiver;
   }
 }

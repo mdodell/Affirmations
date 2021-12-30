@@ -41,9 +41,21 @@ export class ReceiversController {
   }
 
   @UseGuards(ReceiverTokenGuard)
-  @Get('/testing')
-  testing(@Request() req) {
-    return 'Worked';
+  @Get('subscriptionStatus')
+  async updateSubscriptionStatus(@Request() req) {
+    const { token, subscriptionStatus } = req.query;
+    const receiver = await this.receiversService.updateSubscriptionStatus(
+      token,
+      subscriptionStatus
+    );
+
+    const updatedReceiver = await this.receiversService.updateSubscriptionToken(
+      receiver
+    );
+
+    return `You have been ${
+      updatedReceiver.subscribed ? 'subscribed' : 'unsubscribed'
+    } from 'E-ffirmations'`;
   }
 
   @UseGuards(JwtAuthGuard)

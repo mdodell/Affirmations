@@ -8,7 +8,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from '../auth/constants';
 import { PassportModule } from '@nestjs/passport';
 import { ReceiverTokenStrategy } from './receiverToken.strategy';
-import { JwtStrategy } from '../auth/jwt.strategy';
 
 @Module({
   imports: [
@@ -16,7 +15,6 @@ import { JwtStrategy } from '../auth/jwt.strategy';
     PassportModule,
     JwtModule.register({
       secret: 'TestingSecret',
-      signOptions: { expiresIn: '30d' },
     }),
   ],
   controllers: [ReceiversController],

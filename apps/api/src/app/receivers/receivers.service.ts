@@ -21,6 +21,26 @@ export class ReceiversService {
     });
   }
 
+  async updateSubscriptionToken(receiver: Receiver): Promise<Receiver> {
+    const updatedReceiver = await this.receiverModel.update(
+      {
+        subscriptionToken: this.jwtService.sign({
+          email: receiver.email,
+          firstName: receiver.firstName,
+          lastName: receiver.lastName,
+        }),
+      },
+      {
+        where: {
+          id: receiver.id,
+        },
+        returning: true,
+      }
+    );
+
+    return updatedReceiver[1][0];
+  }
+
   find(id: number) {
     return this.receiverModel.findOne({
       where: {
@@ -32,6 +52,9 @@ export class ReceiversService {
   findAll() {
     return this.receiverModel.findAll({
       include: [Affirmation, User],
+      where: {
+        subscribed: true,
+      },
     });
   }
 
@@ -62,11 +85,21 @@ export class ReceiversService {
     });
   }
 
-  validateReceiver(token: string) {
-    return this.receiverModel.findOne({
-      where: {
-        subscriptionToken: token,
+  async updateSubscriptionStatus(
+    token: string,
+    subscriptionStatus: boolean
+  ): Promise<Receiver> {
+    const receiver = await this.receiverModel.update(
+      {
+        subscribed: subscriptionStatus,
       },
-    });
+      {
+        where: {
+          subscriptionToken: token,
+        },
+        returning: true,
+      }
+    );
+    return receiver[1][0];
   }
 }

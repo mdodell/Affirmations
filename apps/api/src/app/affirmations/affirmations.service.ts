@@ -26,6 +26,7 @@ export class AffirmationsService {
   //   name: 'Daily Affirmation',
   //   timeZone: 'America/New_York',
   // })
+  @Cron('* * * * * *')
   async sendOutAffirmations() {
     const receivers = await this.receiverService.findAll();
     for (const receiver of receivers) {

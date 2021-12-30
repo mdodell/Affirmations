@@ -4,7 +4,6 @@ import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
-import { AffirmationsService } from '../affirmations/affirmations.service';
 
 @Module({
   imports: [

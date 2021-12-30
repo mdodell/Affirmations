@@ -16,6 +16,8 @@ import PublicRoute from './components/shared/routes/PublicRoute';
 import PrivateRoute from './components/shared/routes/PrivateRoute';
 import SignUpPage from './components/pages/SignUp/SignUpPage';
 import theme from './constants/theme';
+import NotFoundPage from './components/pages/NotFound/NotFoundPage';
+import UnsubscribePage from './components/pages/Unsubscribe/UnsubscribePage';
 
 ReactDOM.render(
   <StrictMode>
@@ -57,10 +59,18 @@ ReactDOM.render(
                   }
                 />
                 <Route
+                  path="/unsubscribe"
+                  element={
+                    <PublicRoute>
+                      <UnsubscribePage />
+                    </PublicRoute>
+                  }
+                />
+                <Route
                   path="*"
                   element={
                     <PublicRoute>
-                      <h1>Bad</h1>
+                      <NotFoundPage />
                     </PublicRoute>
                   }
                 />
