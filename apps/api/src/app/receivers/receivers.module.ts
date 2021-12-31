@@ -5,7 +5,6 @@ import { Receiver } from './models/receiver.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { MailService } from '../mail/mail.service';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from '../auth/constants';
 import { PassportModule } from '@nestjs/passport';
 import { ReceiverTokenStrategy } from './receiverToken.strategy';
 
@@ -14,7 +13,7 @@ import { ReceiverTokenStrategy } from './receiverToken.strategy';
     SequelizeModule.forFeature([Receiver]),
     PassportModule,
     JwtModule.register({
-      secret: 'TestingSecret',
+      secret: process.env.JWT_RECEIVER_SECRET,
     }),
   ],
   controllers: [ReceiversController],

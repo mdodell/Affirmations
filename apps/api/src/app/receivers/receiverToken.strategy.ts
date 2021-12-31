@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Receiver } from './models/receiver.model';
@@ -9,7 +9,7 @@ export class ReceiverTokenStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromUrlQueryParameter('token'),
       ignoreExpiration: false,
-      secretOrKey: 'TestingSecret',
+      secretOrKey: process.env.JWT_RECEIVER_SECRET,
     });
   }
 
